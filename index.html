@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regnent Design | Premier Architecture & 3D Rendering</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Outfit:wght@200;400;800&display=swap');
+        
+        :root { --accent: #00f2ff; --bg: #000000; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        body { background: var(--bg); color: #fff; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+        
+        #canvas-container { position: fixed; top: 0; left: 0; z-index: 1; pointer-events: none; }
+
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease-out;
+        }
+
+        nav { position: fixed; top: 0; width: 100%; padding: 40px 60px; display: flex; justify-content: space-between; align-items: center; z-index: 100; mix-blend-mode: difference; }
+        .logo { font-family: 'Syncopate'; font-size: 1.5rem; letter-spacing: 10px; color: #fff; text-decoration: none; }
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a { color: white; text-decoration: none; font-size: 10px; font-weight: 800; letter-spacing: 3px; transition: 0.3s; opacity: 0.6; }
+        .nav-links a:hover { opacity: 1; color: var(--accent); }
+
+        section { position: relative; min-height: 100vh; padding: 100px 10%; display: flex; flex-direction: column; justify-content: center; z-index: 2; }
+
+        .hero h1 { font-family: 'Syncopate'; font-size: clamp(3rem, 12vw, 10rem); line-height: 0.85; text-transform: uppercase; margin-bottom: 20px; }
+        .hero p { font-size: 1.2rem; letter-spacing: 5px; color: var(--accent); font-weight: 200; }
+
+        .render-section { height: 400vh; }
+        
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .service-item { border: 1px solid rgba(255,255,255,0.1); padding: 60px 40px; backdrop-filter: blur(10px); background: rgba(255,255,255,0.02); transition: 0.5s; }
+        .service-item:hover { background: var(--accent); color: #000; border-color: var(--accent); transform: scale(1.05); }
+        .service-item h2 { font-family: 'Syncopate'; font-size: 1.5rem; margin-bottom: 15px; }
+
+        .contact-hub { display: flex; flex-direction: column; gap: 30px; }
+        .contact-link { font-family: 'Syncopate'; font-size: clamp(2rem, 6vw, 5rem); text-decoration: none; color: #fff; transition: 0.4s; line-height: 1; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
+        .contact-link:hover { color: var(--accent); border-color: var(--accent); padding-left: 30px; }
+        .contact-link span { font-family: 'Outfit'; font-size: 1rem; display: block; letter-spacing: 5px; color: #555; margin-bottom: 10px; }
+
+        footer { padding: 40px 10%; border-top: 1px solid rgba(255,255,255,0.1); font-size: 10px; letter-spacing: 2px; text-align: center; color: #444; }
+
+        @media (max-width: 768px) {
+            nav { padding: 20px; }
+            .nav-links { display: none; }
+            #custom-cursor { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="custom-cursor"></div>
+    <div id="canvas-container"></div>
+
+    <nav>
+        <a href="#" class="logo">REGNENT</a>
+        <ul class="nav-links">
+            <li><a href="#home">HOME</a></li>
+            <li><a href="aboutwork.html">ABOUT</a></li>
+            <li><a href="renders.html">RENDER'S</a></li>
+            <li><a href="getintouch.html">GET IN TOUCH</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="home" class="hero">
+            <p>ARCHITECTURE • VISUALIZATION</p>
+            <h1>REGNENT<br>DESIGN</h1>
+        </section>
+
+        <section id="renders" class="render-section">
+            <h2 style="font-family: 'Syncopate'; color: var(--accent);">01. THE VAULT</h2>
+            <p>SCROLL TO NAVIGATE THROUGH OUR 3D RENDER EXHIBITION</p>
+        </section>
+
+        <section id="services">
+            <h2 style="font-family: 'Syncopate'; margin-bottom: 60px; text-align: center;">OUR EXPERTISE</h2>
+            <div class="service-grid">
+                <div class="service-item"><h2><a href="renders.html">Exterior</a></h2><p>Hyper-realistic lighting for architectural facades and urban environments.</p></div>
+                <div class="service-item"><h2><a href="renders.html">Interior</a></h2><p>High-end furniture and material modeling with cinematic rendering.</p></div>
+                <div class="service-item"><h2><a href="renders.html">Animation</a></h2><p>4K Walkthroughs and drone-view architectural simulations.</p></div>
+            </div>
+        </section>
+
+       
+    </main>
+
+    <footer>
+        &copy; 2026 REGNENT DESIGN. ALL RIGHTS RESERVED. FUTURE BUILT TODAY.
+    </footer>
+
+    <script>
+        const cursor = document.getElementById('custom-cursor');
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX - 10, y: e.clientY - 10, duration: 0.3, ease: "power2.out" });
+        });
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const starGeometry = new THREE.BufferGeometry();
+        const starCount = 2000;
+        const posArray = new Float32Array(starCount * 3);
+        for(let i=0; i<starCount * 3; i++) { posArray[i] = (Math.random() - 0.5) * 100; }
+        starGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const starMaterial = new THREE.PointsMaterial({ size: 0.05, color: 0x00f2ff });
+        const stars = new THREE.Points(starGeometry, starMaterial);
+        scene.add(stars);
+
+        const geo = new THREE.IcosahedronGeometry(10, 1);
+        const mat = new THREE.MeshBasicMaterial({ color: 0x00f2ff, wireframe: true, transparent: true, opacity: 0.1 });
+        const bgMesh = new THREE.Mesh(geo, mat);
+        scene.add(bgMesh);
+
+        const renderImages = [
+            'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200',
+            'https://images.unsplash.com/photo-1600585154526-990dcea4db0d?auto=format&fit=crop&w=1200',
+            'https://images.unsplash.com/photo-1600566753190-17f0bb2a6c3e?auto=format&fit=crop&w=1200',
+            'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200',
+            'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200',
+            'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200'
+        ];
+
+        const loader = new THREE.TextureLoader();
+        const frameGroup = new THREE.Group();
+        renderImages.forEach((img, i) => {
+            const mesh = new THREE.Mesh(
+                new THREE.PlaneGeometry(14, 8),
+                new THREE.MeshBasicMaterial({ map: loader.load(img), side: THREE.DoubleSide })
+            );
+            mesh.position.set(i % 2 === 0 ? 10 : -10, -i * 20 - 25, 0);
+            frameGroup.add(mesh);
+        });
+        scene.add(frameGroup);
+
+        camera.position.z = 25;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            stars.rotation.y += 0.001;
+            bgMesh.rotation.x += 0.002;
+            bgMesh.rotation.y += 0.002;
+            frameGroup.children.forEach((f, i) => {
+                f.rotation.y = Math.sin(Date.now() * 0.001 + i) * 0.1;
+            });
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.to(camera.position, {
+            y: -120,
+            scrollTrigger: {
+                trigger: "main",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

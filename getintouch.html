@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect | Regnent Design</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Outfit:wght@200;400;800&display=swap');
+        
+        :root { --accent: #00f2ff; --bg: #000000; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        body { background: var(--bg); color: #fff; font-family: 'Outfit', sans-serif; overflow: hidden; }
+        
+        #canvas-container { position: fixed; top: 0; left: 0; z-index: 1; pointer-events: none; }
+
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease-out;
+        }
+
+        nav { position: fixed; top: 0; width: 100%; padding: 40px 60px; display: flex; justify-content: space-between; align-items: center; z-index: 100; mix-blend-mode: difference; }
+        .logo { font-family: 'Syncopate'; font-size: 1.5rem; letter-spacing: 10px; color: #fff; text-decoration: none; }
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a { color: white; text-decoration: none; font-size: 10px; font-weight: 800; letter-spacing: 3px; transition: 0.3s; opacity: 0.6; }
+        .nav-links a:hover { opacity: 1; color: var(--accent); }
+
+        .contact-container {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 0 10%;
+            align-items: center;
+        }
+
+        .contact-info h1 { font-family: 'Syncopate'; font-size: clamp(2rem, 8vw, 5rem); line-height: 1; margin-bottom: 30px; }
+        .contact-info p { color: var(--accent); letter-spacing: 5px; font-size: 0.9rem; margin-bottom: 50px; }
+
+        .contact-details { display: flex; flex-direction: column; gap: 30px; }
+        .detail-item span { display: block; font-size: 10px; opacity: 0.5; letter-spacing: 3px; margin-bottom: 5px; }
+        .detail-item a { font-size: 1.5rem; color: #fff; text-decoration: none; transition: 0.3s; }
+        .detail-item a:hover { color: var(--accent); padding-left: 10px; }
+
+        .form-wrapper {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            padding: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .input-group { position: relative; margin-bottom: 40px; }
+        .input-group input, .input-group textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 0;
+            color: #fff;
+            font-family: 'Outfit';
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .input-group label {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            pointer-events: none;
+            transition: 0.3s;
+            opacity: 0.5;
+        }
+        .input-group input:focus ~ label, .input-group input:valid ~ label,
+        .input-group textarea:focus ~ label, .input-group textarea:valid ~ label {
+            top: -20px;
+            color: var(--accent);
+            opacity: 1;
+        }
+        .input-group input:focus, .input-group textarea:focus { border-bottom-color: var(--accent); }
+
+        .submit-btn {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 20px 40px;
+            font-family: 'Syncopate';
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.4s;
+        }
+        .submit-btn:hover { letter-spacing: 5px; filter: brightness(1.2); }
+
+        @media (max-width: 968px) {
+            .contact-container { grid-template-columns: 1fr; padding-top: 120px; overflow-y: auto; }
+            .form-wrapper { padding: 30px; margin-bottom: 50px; }
+            body { overflow-y: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="custom-cursor"></div>
+    <div id="canvas-container"></div>
+
+    <nav>
+        <a href="index.html" class="logo">REGNENT</a>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="aboutwork.html">ABOUT</a></li>
+            <li><a href="renders.html">RENDER'S</a></li>
+            <li><a href="getintouch.html" style="opacity: 1; color: var(--accent);">GET IN TOUCH</a></li>
+        </ul>
+    </nav>
+
+    <main class="contact-container">
+        <div class="contact-info">
+            <p>ESTABLISH CONNECTION</p>
+            <h1>START THE<br>PROJECT.</h1>
+            <div class="contact-details">
+                <div class="detail-item">
+                    <span>EMAIL INQUIRIES</span>
+                    <a href="mailto:hello@regnent.design">HELLO@REGNENT.DESIGN</a>
+                </div>
+                <div class="detail-item">
+                    <span>GLOBAL STUDIO</span>
+                    <a href="#">LONDON / TOKYO / NYC</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-wrapper">
+            <form id="contact-form">
+                <div class="input-group">
+                    <input type="text" required>
+                    <label>Identification / Name</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" required>
+                    <label>Transmission / Email</label>
+                </div>
+                <div class="input-group">
+                    <textarea rows="4" required></textarea>
+                    <label>Project Brief / Message</label>
+                </div>
+                <button type="submit" class="submit-btn">INITIATE SEND</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        const cursor = document.getElementById('custom-cursor');
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX - 10, y: e.clientY - 10, duration: 0.3, ease: "power2.out" });
+        });
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        const count = 150;
+        const positions = new Float32Array(count * 3);
+        for(let i=0; i<count*3; i++) { positions[i] = (Math.random() - 0.5) * 50; }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({ size: 0.1, color: 0x00f2ff });
+        const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particles);
+
+        camera.position.z = 30;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particles.rotation.y += 0.001;
+            particles.rotation.x += 0.0005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        gsap.from(".contact-info", { opacity: 0, x: -50, duration: 1, ease: "power3.out" });
+        gsap.from(".form-wrapper", { opacity: 0, x: 50, duration: 1, delay: 0.3, ease: "power3.out" });
+
+        document.getElementById('contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = document.querySelector('.submit-btn');
+            btn.innerHTML = "TRANSMISSION SENT";
+            btn.style.background = "#fff";
+            gsap.to(".form-wrapper", { scale: 0.98, duration: 0.2, yoyo: true, repeat: 1 });
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

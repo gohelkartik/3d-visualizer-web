@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive | Regnent Design</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Outfit:wght@200;400;800&display=swap');
+        
+        :root { --accent: #00f2ff; --bg: #000000; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        body { background: var(--bg); color: #fff; font-family: 'Outfit', sans-serif; overflow: hidden; }
+        
+        #canvas-container { position: fixed; top: 0; left: 0; z-index: 1; pointer-events: none; }
+
+        #custom-cursor {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+        }
+
+        nav { position: fixed; top: 0; width: 100%; padding: 40px 60px; display: flex; justify-content: space-between; align-items: center; z-index: 100; mix-blend-mode: difference; }
+        .logo { font-family: 'Syncopate'; font-size: 1.5rem; letter-spacing: 10px; color: #fff; text-decoration: none; }
+        
+        .slider-container {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            gap: 15vw;
+            padding-right: 20vw;
+            will-change: transform;
+        }
+
+        .project-card {
+            position: relative;
+            flex-shrink: 0;
+            width: 60vh;
+            height: 75vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .img-box {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            transition: border 0.5s;
+        }
+
+        .project-card:hover .img-box { border-color: var(--accent); }
+
+        .img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(1) brightness(0.6);
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s;
+        }
+
+        .project-card:hover img { transform: scale(1.1); filter: grayscale(0) brightness(1); }
+
+        .project-info {
+            position: relative;
+            z-index: 3;
+            padding: 30px;
+            pointer-events: none;
+        }
+
+        .project-info span { font-size: 10px; letter-spacing: 5px; color: var(--accent); display: block; margin-bottom: 10px; }
+        .project-info h2 { font-family: 'Syncopate'; font-size: 2rem; line-height: 1; text-transform: uppercase; }
+
+          nav { position: fixed; top: 0; width: 100%; padding: 40px 60px; display: flex; justify-content: space-between; align-items: center; z-index: 100; mix-blend-mode: difference; }
+        .logo { font-family: 'Syncopate'; font-size: 1.5rem; letter-spacing: 10px; color: #fff; text-decoration: none; }
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a { color: white; text-decoration: none; font-size: 10px; font-weight: 800; letter-spacing: 3px; transition: 0.3s; opacity: 0.6; }
+        .nav-links a:hover { opacity: 1; color: var(--accent); }
+        .instruction {
+            position: fixed;
+            bottom: 40px;
+            left: 60px;
+            z-index: 10;
+            font-size: 10px;
+            letter-spacing: 3px;
+            opacity: 0.4;
+        }
+
+        @media (max-width: 768px) {
+            .project-card { width: 80vw; height: 60vh; }
+            nav { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="custom-cursor"></div>
+    <div id="canvas-container"></div>
+
+    <nav>
+        <a href="index.html" class="logo">REGNENT</a>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="aboutwork.html">ABOUT</a></li>
+            <li><a href="renders.html" style="opacity: 1; color: var(--accent);">RENDER'S</a></li>
+            <li><a href="getintouch.html" >GET IN TOUCH</a></li>
+        </ul>
+    </nav>
+
+
+    <div class="instruction">USE SCROLL WHEEL TO NAVIGATE EXHIBITION</div>
+
+    <div class="slider-container" id="slider">
+        <div class="slider-wrapper" id="wrapper">
+            </div>
+    </div>
+
+    <script>
+        const projects = [
+            { title: "Vertex Hub", type: "COMMERCIAL", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000" },
+            { title: "Echo Villa", type: "RESIDENTIAL", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000" },
+            { title: "Neon Monolith", type: "CONCEPT", img: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000" },
+            { title: "Void Interior", type: "INTERIOR", img: "https://cdn.apartmenttherapy.info/image/upload/v1696351310/at/house%20tours/2023-House-Tours/2023-October/miranda-co/tours-brooklyn-miranda-co-6.jpg" },
+            { title: "Aura Tower", type: "EXTERIOR", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000" }
+        ];
+
+        const wrapper = document.getElementById('wrapper');
+        projects.forEach(p => {
+            wrapper.innerHTML += `
+                <div class="project-card">
+                    <div class="img-box"><img src="${p.img}" alt="${p.title}"></div>
+                    <div class="project-info">
+                        <span>${p.type}</span>
+                        <h2>${p.title}</h2>
+                    </div>
+                </div>
+            `;
+        });
+
+        const cursor = document.getElementById('custom-cursor');
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
+        });
+
+        let scrollPos = 0;
+        let targetScroll = 0;
+        window.addEventListener('wheel', (e) => {
+            targetScroll += e.deltaY * 0.5;
+        });
+
+        function updateSlider() {
+            scrollPos = gsap.utils.interpolate(scrollPos, targetScroll, 0.1);
+            const maxScroll = wrapper.offsetWidth - window.innerWidth + (window.innerWidth * 0.2);
+            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+            gsap.set(wrapper, { x: -scrollPos });
+            requestAnimationFrame(updateSlider);
+        }
+        updateSlider();
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const crystalGeo = new THREE.IcosahedronGeometry(15, 0);
+        const crystalMat = new THREE.MeshBasicMaterial({ color: 0x00f2ff, wireframe: true, transparent: true, opacity: 0.05 });
+        const crystal = new THREE.Mesh(crystalGeo, crystalMat);
+        scene.add(crystal);
+
+        const particles = new THREE.BufferGeometry();
+        const pCount = 1000;
+        const pPos = new Float32Array(pCount * 3);
+        for(let i=0; i<pCount*3; i++) pPos[i] = (Math.random() - 0.5) * 100;
+        particles.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+        const pMat = new THREE.PointsMaterial({ size: 0.05, color: 0x00f2ff });
+        const pMesh = new THREE.Points(particles, pMat);
+        scene.add(pMesh);
+
+        camera.position.z = 40;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            crystal.rotation.y += 0.001;
+            crystal.rotation.z += 0.001;
+            pMesh.rotation.y -= 0.0005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
